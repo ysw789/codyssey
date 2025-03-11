@@ -13,12 +13,12 @@ def write_into_markdown(file):
     markdown_content.append("| 시간 | 이벤트 | 메시지 |")
     markdown_content.append("|------|--------|--------|")
     
-    start_idx = 1
+    data_lines = lines[1:]
     
-    for i in range(start_idx, len(lines)):
-        line = lines[i].strip()
-        
-        parts = line.split(',', 2)
+    sorted_lines = sorted(data_lines, key=lambda x: x.split(',')[0], reverse=True)
+    
+    for line in sorted_lines:
+        parts = line.strip().split(',', 2)
         
         timestamp = parts[0].strip()
         event = parts[1].strip()
