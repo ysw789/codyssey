@@ -1,7 +1,22 @@
+import sys
+
 def open_file(file_path):
-    with open(file_path, 'r') as f:
-        file = f.read()
-        return file
+    try:
+        with open(file_path, 'r') as f:
+            file = f.read()
+            return file
+    except FileNotFoundError:
+        print(f'파일을 찾을 수 없습니다: {file_path}')
+        sys.exit(1) # 오류로 인한 종료
+    except PermissionError:
+        print(f'파일을 열 권한이 없습니다: {file_path}')
+        sys.exit(1)
+    except UnicodeDecodeError:
+        print(f'읽을 수 없는 형식입니다: {file_path}')
+        sys.exit(1)
+    except Exception as e:
+        print(f'알 수 없는 에러가 발생했습니다: {e}')
+        sys.exit(99) # 예상치 못한 오류
 
 def write_into_markdown(file):
     lines = file.strip().split('\n')
@@ -28,6 +43,8 @@ def write_into_markdown(file):
     
     with open('log_analysis.md', 'w') as md_file:
         md_file.write('\n'.join(markdown_content))
+
+    print('>> Markdown 파일 생성 성공!')
 
 file_path = 'mission_computer_main.log'
 log_content = open_file(file_path)
