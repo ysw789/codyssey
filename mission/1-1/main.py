@@ -1,5 +1,3 @@
-import sys
-
 LOG_FILE_PATH = 'mission_computer_main.log'
 ANALYSIS_LOG_FILE_NAME = 'log_analysis.md'
 FATAL_LOG_FILE_NAME = 'fatal_logs.md'
@@ -11,16 +9,16 @@ def open_file(file_path):
             return lines
     except FileNotFoundError:
         print(f'파일을 찾을 수 없습니다: {file_path}')
-        sys.exit(1) # 오류로 인한 종료
+        exit(1) # 오류로 인한 종료
     except PermissionError:
         print(f'파일을 열 권한이 없습니다: {file_path}')
-        sys.exit(1)
+        exit(1)
     except UnicodeDecodeError:
         print(f'읽을 수 없는 형식입니다: {file_path}')
-        sys.exit(1)
+        exit(1)
     except Exception as e:
         print(f'알 수 없는 에러가 발생했습니다: {e}')
-        sys.exit(99) # 예상치 못한 오류
+        exit(99) # 예상치 못한 오류
 
 def write_into_markdown(lines):
     markdown_content = []
