@@ -56,6 +56,7 @@ def write_into_markdown(file):
 
     print('>> Markdown 파일 생성 성공!')
 
+print('Hello Mars')
 file_path = 'mission_computer_main.log'
 log_content = open_file(file_path)
 write_into_markdown(log_content)
