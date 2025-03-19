@@ -6,6 +6,7 @@ def parse_csv_to_list(file_path):
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             first_line = f.readline()
+            headers = [filed.strip() for filed in first_line.strip().split(',')]
             
             for index, line in enumerate(f):
                 if index == 0:
@@ -15,7 +16,7 @@ def parse_csv_to_list(file_path):
                 row_data = [field.strip() for field in row_data]
                 data_list.append(row_data)
 
-            return data_list
+            return headers, data_list
 
     except FileNotFoundError:
         print(f'파일을 찾을 수 없습니다: {file_path}')
@@ -31,6 +32,14 @@ def parse_csv_to_list(file_path):
         exit(99)
 
 if __name__ == "__main__":
-    list = parse_csv_to_list(INVENTORY_LIST_FILE_NAME)
-    for i in list:
-        print(i)
+    headers, list = parse_csv_to_list(INVENTORY_LIST_FILE_NAME)
+    
+    flammability_index = headers.index('Flammability')
+    if flammability_index == -1:
+        print('Flammability 헤더를 찾을 수 없습니다.')
+        exit(1)
+
+    list = sorted(list, key=lambda x: float(x[flammability_index]), reverse=True)
+
+    for row in list:
+        print(row)
