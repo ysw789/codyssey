@@ -1,4 +1,5 @@
 INVENTORY_LIST_FILE_NAME = 'Mars_Base_Inventory_List.csv'
+FILTERED_CSV_FILE_NAME = 'Mars_Base_Inventory_danger.csv'
 
 def parse_csv_to_list(file_path):
     data_list = []
@@ -41,5 +42,19 @@ if __name__ == "__main__":
 
     list = sorted(list, key=lambda x: float(x[flammability_index]), reverse=True)
 
-    for row in list:
-        print(row)
+    filtered_rows = [row for row in list if float(row[flammability_index]) >= 0.7]
+
+    print('>> Flammability over 0.7')
+    print(', '.join(headers))
+    for row in filtered_rows:
+        print(', '.join(row))
+
+    try:
+        with open(FILTERED_CSV_FILE_NAME, 'w', encoding='utf-8') as f_out:
+            f_out.write(",".join(headers) + "\n")
+            for row in filtered_rows:
+                f_out.write(",".join(row) + "\n")
+        print('>> 필터링 된 CSV 파일이 저장되었습니다.')
+    except Exception as e:
+        print(f"CSV 파일 저장 중 오류 발생: {e}")
+        exit(1)
