@@ -43,12 +43,12 @@ class FileManager:
         # 필터링 된 데이터를 CSV 파일로 저장
         try:
             with open(self.filtered_csv_file, 'w', encoding='utf-8') as f_out:
-                f_out.write(",".join(headers) + "\n")
+                f_out.write(','.join(headers) + '\n')
                 for row in filtered_rows:
-                    f_out.write(",".join(row) + "\n")
+                    f_out.write(','.join(row) + '\n')
             print('>> 필터링 된 CSV 파일이 저장되었습니다.')
         except Exception as e:
-            print(f"CSV 파일 저장 중 오류 발생: {e}")
+            print(f'CSV 파일 저장 중 오류 발생: {e}')
             exit(1)
 
     def read_and_print_binary_file(self, file_path):

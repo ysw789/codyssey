@@ -11,7 +11,7 @@ def print_list(headers, list):
         print(', '.join(row))
     print()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     fm = FileManager(INVENTORY_LIST_FILE_NAME, BINARY_OUTPUT_FILE_NAME, FILTERED_CSV_FILE_NAME)
     headers, data_list = fm.parse_csv_to_list()
 
