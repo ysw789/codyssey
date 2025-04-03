@@ -15,11 +15,14 @@ class MissionComputer:
 
     def get_sensor_data(self):
         ds = DummySensor()
-        while True:
-            ds.set_env()
-            self.env_values = ds.get_env()
-            print(self.env_values)
-            time.sleep(5)
+        try:
+            while True:
+                ds.set_env()
+                self.env_values = ds.get_env()
+                print(self.env_values)
+                time.sleep(5)
+        except KeyboardInterrupt:
+            print('System stopped....')
 
 if __name__ == '__main__':
     RunComputer = MissionComputer()
