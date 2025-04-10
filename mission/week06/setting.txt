@@ -1,0 +1,5 @@
+os
+os_version
+cpu_type
+cpu_cores
+mem_size
