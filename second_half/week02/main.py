@@ -9,6 +9,9 @@ PORT = 12345
 clients = []
 nicknames = []
 
+# 스레드 동기화를 위한 락
+client_lock = threading.Lock()
+
 
 def handle_client(client):
     """클라이언트로부터 메시지를 수신하고 브로드캐스트하는 함수"""
@@ -16,12 +19,13 @@ def handle_client(client):
         try:
             message = client.recv(1024).decode('utf-8')
             if message == '/종료':
-                index = clients.index(client)
-                clients.remove(client)
+                with client_lock:
+                    index = clients.index(client)
+                    clients.remove(client)
+                    nickname = nicknames[index]
+                    nicknames.remove(nickname)
                 client.close()
-                nickname = nicknames[index]
                 broadcast(f'{nickname}님이 퇴장하셨습니다.'.encode('utf-8'))
-                nicknames.remove(nickname)
                 break
             elif message.startswith('@'):
                 # 귓속말 기능
@@ -29,11 +33,17 @@ def handle_client(client):
                 if len(parts) >= 2:
                     target_nickname = parts[0][1:]  # @ 제거
                     private_message = parts[1]
-                    if target_nickname in nicknames:
-                        target_index = nicknames.index(target_nickname)
-                        target_client = clients[target_index]
-                        sender_index = clients.index(client)
-                        sender_nickname = nicknames[sender_index]
+                    with client_lock:
+                        if target_nickname in nicknames:
+                            target_index = nicknames.index(target_nickname)
+                            target_client = clients[target_index]
+                            sender_index = clients.index(client)
+                            sender_nickname = nicknames[sender_index]
+                        else:
+                            target_client = None
+                            sender_nickname = None
+                    
+                    if target_client and sender_nickname:
                         whisper_message = f'[귓속말] {sender_nickname}> {private_message}'
                         target_client.send(whisper_message.encode('utf-8'))
                         # 발신자에게도 귓속말 전송 확인 메시지
@@ -42,28 +52,38 @@ def handle_client(client):
                         client.send('해당 닉네임의 사용자가 없습니다.'.encode('utf-8'))
             else:
                 # 일반 메시지
-                index = clients.index(client)
-                nickname = nicknames[index]
+                with client_lock:
+                    index = clients.index(client)
+                    nickname = nicknames[index]
                 broadcast(f'{nickname}> {message}'.encode('utf-8'))
         except:
             # 클라이언트 연결이 끊어진 경우
-            index = clients.index(client)
-            clients.remove(client)
+            with client_lock:
+                index = clients.index(client)
+                clients.remove(client)
+                nickname = nicknames[index]
+                nicknames.remove(nickname)
             client.close()
-            nickname = nicknames[index]
             broadcast(f'{nickname}님이 퇴장하셨습니다.'.encode('utf-8'))
-            nicknames.remove(nickname)
             break
 
 
 def broadcast(message):
     """모든 클라이언트에게 메시지를 전송하는 함수"""
-    for client in clients:
+    with client_lock:
+        clients_copy = clients.copy()
+    
+    # 락 해제 후 메시지 전송
+    for client in clients_copy:
         try:
             client.send(message)
         except:
             # 전송 실패한 클라이언트 제거
-            clients.remove(client)
+            with client_lock:
+                if client in clients:
+                    index = clients.index(client)
+                    clients.remove(client)
+                    nicknames.pop(index)
 
 
 def start_server():
@@ -82,8 +102,10 @@ def start_server():
 
         client.send('닉네임을 입력하세요: '.encode('utf-8'))
         nickname = client.recv(1024).decode('utf-8')
-        nicknames.append(nickname)
-        clients.append(client)
+        
+        with client_lock:
+            nicknames.append(nickname)
+            clients.append(client)
 
         print(f'닉네임: {nickname}')
         broadcast(f'{nickname}님이 입장하셨습니다.'.encode('utf-8'))
