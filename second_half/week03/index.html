@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우주 해적 - Space Pirates</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            margin-top: 10px;
+            color: #cccccc;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card h2 {
+            color: #4ecdc4;
+            margin-top: 0;
+            font-size: 1.5em;
+            border-bottom: 2px solid #4ecdc4;
+            padding-bottom: 10px;
+        }
+        
+        .card p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .highlight {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🏴‍☠️ 우주 해적</h1>
+            <p class="subtitle">Space Pirates - 무한한 우주를 누비는 자유로운 영혼들</p>
+        </div>
+        
+        <div class="content">
+            <div class="card">
+                <h2>🌌 우주 해적이란?</h2>
+                <p>우주 해적은 <span class="highlight">무한한 우주 공간을 누비며 자유롭게 활동하는 모험가들</span>입니다. 
+                그들은 전통적인 해적의 정신을 우주로 확장하여, 은하계의 다양한 행성과 우주 정거장을 
+                무대로 삼아 활동합니다.</p>
+                
+                <p>우주 해적들은 단순한 약탈자들이 아닙니다. 그들은 <span class="highlight">자유, 모험, 그리고 
+                우주 탐험의 정신</span>을 대표하는 존재들입니다. 그들은 우주의 미지의 영역을 탐험하고, 
+                새로운 문명과 만나며, 우주의 비밀을 밝혀내는 선구자들입니다.</p>
+            </div>
+            
+            <div class="card">
+                <h2>🚀 우주 해적의 특징</h2>
+                <p><strong>자유로운 정신:</strong> 우주 해적들은 어떤 권위에도 얽매이지 않는 자유로운 영혼들입니다. 
+                그들은 자신만의 규칙과 가치관을 가지고 우주를 누빕니다.</p>
+                
+                <p><strong>탐험 정신:</strong> 미지의 우주 공간에 대한 끝없는 호기심과 탐험 정신을 가지고 있습니다. 
+                새로운 행성, 외계 문명, 우주의 비밀을 찾아 나서는 모험가들입니다.</p>
+                
+                <p><strong>우주선 조종 기술:</strong> 최첨단 우주선을 자유자재로 조종하며, 우주의 위험한 환경에서도 
+                생존할 수 있는 뛰어난 기술과 경험을 보유하고 있습니다.</p>
+            </div>
+            
+            <div class="card">
+                <h2>⭐ 유명한 우주 해적들</h2>
+                <p><strong>캡틴 스카이워커:</strong> 가장 유명한 우주 해적 중 한 명으로, 
+                <span class="highlight">은하계 최고의 우주선 조종사</span>로 알려져 있습니다. 
+                그의 대담한 모험담은 우주 전역에 전해지고 있습니다.</p>
+                
+                <p><strong>네비게이터 루나:</strong> 우주 항로를 완벽하게 파악하고 있는 
+                <span class="highlight">최고의 항해사</span>입니다. 그녀의 지도 없이는 
+                아무도 위험한 우주 구역을 통과할 수 없다고 합니다.</p>
+                
+                <p><strong>엔지니어 스파크:</strong> 우주선의 모든 기계를 완벽하게 다룰 수 있는 
+                <span class="highlight">천재적인 기술자</span>입니다. 고장난 우주선도 
+                그의 손을 거치면 새것처럼 작동합니다.</p>
+            </div>
+            
+            <div class="card">
+                <h2>🌍 우주 해적의 활동 영역</h2>
+                <p>우주 해적들은 <span class="highlight">은하계의 모든 구역</span>에서 활동합니다. 
+                그들은 거대한 우주 정거장에서 작은 소행성까지, 모든 곳을 자신들의 활동 무대로 삼습니다.</p>
+                
+                <p><strong>우주 정거장:</strong> 다양한 문명이 교류하는 거대한 우주 정거장들은 
+                우주 해적들에게 정보와 자원을 얻을 수 있는 중요한 장소입니다.</p>
+                
+                <p><strong>미지의 행성:</strong> 아직 탐험되지 않은 행성들은 우주 해적들에게 
+                새로운 모험과 발견의 기회를 제공합니다.</p>
+                
+                <p><strong>소행성대:</strong> 위험하지만 풍부한 자원이 있는 소행성대는 
+                우주 해적들이 선호하는 활동 지역 중 하나입니다.</p>
+            </div>
+            
+            <div class="card">
+                <h2>⚔️ 우주 해적의 도구와 기술</h2>
+                <p>우주 해적들은 <span class="highlight">최첨단 우주 기술</span>을 활용합니다. 
+                그들의 우주선은 은하계에서 가장 빠르고 강력한 함선들 중 하나입니다.</p>
+                
+                <p><strong>우주선:</strong> 초광속 엔진을 탑재한 우주선으로, 
+                은하계의 어느 곳이든 빠르게 이동할 수 있습니다.</p>
+                
+                <p><strong>우주복:</strong> 우주의 극한 환경에서도 생존할 수 있는 
+                특수 제작된 우주복을 착용합니다.</p>
+                
+                <p><strong>통신 장비:</strong> 은하계 어디서든 다른 우주 해적들과 
+                연락할 수 있는 고급 통신 시스템을 보유하고 있습니다.</p>
+            </div>
+            
+            <div class="card">
+                <h2>🌟 우주 해적의 철학</h2>
+                <p>우주 해적들은 <span class="highlight">자유, 우정, 모험</span>을 최고의 가치로 여깁니다. 
+                그들은 서로를 믿고 의지하며, 함께 위험을 헤쳐나가는 진정한 동료애를 가지고 있습니다.</p>
+                
+                <p>"우주는 무한하고, 우리의 모험도 무한하다"는 것이 우주 해적들의 모토입니다. 
+                그들은 절대 포기하지 않으며, 어떤 어려움이 닥쳐도 함께 극복해 나갑니다.</p>
+                
+                <p>우주 해적이 되는 것은 단순한 직업이 아닙니다. 
+                그것은 <span class="highlight">삶의 방식</span>이며, 
+                <span class="highlight">자유로운 영혼의 표현</span>입니다.</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>🏴‍☠️ <strong>우주 해적</strong> - 무한한 우주를 누비는 자유로운 영혼들 🏴‍☠️</p>
+            <p>우주는 우리의 무대이고, 모험은 우리의 삶입니다!</p>
+        </div>
+    </div>
+    
+    <script>
+        // 별 생성 스크립트
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numStars = 100;
+            
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 2 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // 페이지 로드 시 별 생성
+        window.addEventListener('load', createStars);
+    </script>
+</body>
+</html>
