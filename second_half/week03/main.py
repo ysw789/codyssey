@@ -3,6 +3,75 @@ import socketserver
 import datetime
 import os
 import sys
+import urllib.request
+import urllib.parse
+import json
+
+
+def get_location_by_ip(ip_address):
+    try:
+        # 로컬 IP 주소인 경우 처리
+        if ip_address in ['127.0.0.1', '::1', 'localhost']:
+            return {
+                'country': '로컬',
+                'region': '로컬',
+                'city': '로컬',
+                'timezone': '로컬',
+                'isp': '로컬 네트워크'
+            }
+        
+        # ip-api.com API 사용
+        url = f'http://ip-api.com/json/{ip_address}?fields=status,message,country,regionName,city,timezone,isp,query'
+        
+        with urllib.request.urlopen(url, timeout=5) as response:
+            data = json.loads(response.read().decode('utf-8'))
+            
+            if data.get('status') == 'success':
+                return {
+                    'country': data.get('country', '알 수 없음'),
+                    'region': data.get('regionName', '알 수 없음'),
+                    'city': data.get('city', '알 수 없음'),
+                    'timezone': data.get('timezone', '알 수 없음'),
+                    'isp': data.get('isp', '알 수 없음'),
+                    'query': data.get('query', ip_address)
+                }
+            else:
+                return {
+                    'country': '알 수 없음',
+                    'region': '알 수 없음',
+                    'city': '알 수 없음',
+                    'timezone': '알 수 없음',
+                    'isp': '알 수 없음',
+                    'error': data.get('message', '위치 정보 조회 실패')
+                }
+                
+    except urllib.error.URLError:
+        return {
+            'country': '알 수 없음',
+            'region': '알 수 없음',
+            'city': '알 수 없음',
+            'timezone': '알 수 없음',
+            'isp': '알 수 없음',
+            'error': '네트워크 오류'
+        }
+    except json.JSONDecodeError:
+        return {
+            'country': '알 수 없음',
+            'region': '알 수 없음',
+            'city': '알 수 없음',
+            'timezone': '알 수 없음',
+            'isp': '알 수 없음',
+            'error': '데이터 파싱 오류'
+        }
+    except Exception as e:
+        return {
+            'country': '알 수 없음',
+            'region': '알 수 없음',
+            'city': '알 수 없음',
+            'timezone': '알 수 없음',
+            'isp': '알 수 없음',
+            'error': f'예상치 못한 오류: {str(e)}'
+        }
 
 
 class SpacePirateHandler(http.server.SimpleHTTPRequestHandler):
@@ -46,7 +115,28 @@ class SpacePirateHandler(http.server.SimpleHTTPRequestHandler):
         current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         client_ip = self.client_address[0]
         
+        # 위치 정보 조회
+        location_info = get_location_by_ip(client_ip)
+        
+        # 기본 접속 정보 출력
         print(f'[{current_time}] 접속 - IP: {client_ip}, 경로: {self.path}')
+        
+        # 위치 정보 출력
+        if 'error' in location_info:
+            print(f'  └─ 위치 정보: {location_info["country"]} ({location_info["error"]})')
+        else:
+            location_str = f'{location_info["country"]}'
+            if location_info['region'] != '알 수 없음' and location_info['region'] != location_info['country']:
+                location_str += f', {location_info["region"]}'
+            if location_info['city'] != '알 수 없음':
+                location_str += f', {location_info["city"]}'
+            
+            print(f'  └─ 위치 정보: {location_str}')
+            print(f'  └─ ISP: {location_info["isp"]}')
+            if location_info['timezone'] != '알 수 없음':
+                print(f'  └─ 시간대: {location_info["timezone"]}')
+        
+        print('-' * 60)
     
 
 def start_server():
