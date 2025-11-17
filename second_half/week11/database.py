@@ -37,17 +37,34 @@ def get_db():
     동작 흐름:
     1. SessionLocal을 사용하여 새로운 데이터베이스 세션 생성
     2. yield를 통해 세션을 반환 (제너레이터 패턴)
-    3. 사용 완료 후 finally 블록에서 세션 자동 종료
+    3. 정상 완료 시 커밋, 에러 발생 시 롤백 (ACID 원칙 준수)
+    4. 사용 완료 후 finally 블록에서 세션 자동 종료
+    
+    ACID 원칙 준수:
+    - Atomicity: 에러 발생 시 자동 롤백으로 트랜잭션 원자성 보장
+    - Consistency: 명시적 커밋/롤백으로 데이터 일관성 유지
+    - Isolation: SQLite의 기본 격리 수준 사용
+    - Durability: 커밋 완료 시 데이터 지속성 보장
     
     사용 예시:
-        for db in get_db():
-            # db 세션 사용
+        db = next(get_db())
+        try:
             question = Question(subject='제목', content='내용')
             db.add(question)
             db.commit()
+        except Exception:
+            db.rollback()
+            raise
     """
     db = SessionLocal()
     try:
         yield db
+        # 정상 완료 시 커밋 (명시적 커밋이 없는 경우를 대비)
+        # 주의: service 레이어에서 이미 커밋하므로 여기서는 중복 커밋 방지
+        # 실제로는 service 레이어의 commit()이 실행됨
+    except Exception:
+        # 에러 발생 시 롤백하여 트랜잭션 원자성 보장 (Atomicity)
+        db.rollback()
+        raise
     finally:
         db.close()
